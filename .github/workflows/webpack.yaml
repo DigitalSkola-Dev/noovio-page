@@ -1,0 +1,208 @@
+name: Build and Push to DigitalOcean Registry
+
+on:
+  push:
+    branches:
+      - main
+      - stg
+      - dev
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Image version'
+        required: true
+
+env:
+  REGISTRY: "dsdevopsengineer/private"
+  IMAGE_NAME: "cai-fe"
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the repo 
+        uses: actions/checkout@v2
+
+      - name: Set short SHA
+        id: vars
+        run: echo "SHORT_SHA=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
+
+      - name: Set Environment Tag Based on Branch
+        id: set-env
+        run: |
+          case "${GITHUB_REF_NAME}" in
+            "main")
+              echo "ENVIRONMENT=main" >> $GITHUB_ENV
+              cp .env.prod .env
+              ;;
+            "stg")
+              echo "ENVIRONMENT=stg" >> $GITHUB_ENV
+              cp .env.dev .env
+              ;;
+            "dev")
+              echo "ENVIRONMENT=dev" >> $GITHUB_ENV
+              cp .env.dev .env
+              ;;
+            *)
+              echo "ENVIRONMENT=dev" >> $GITHUB_ENV # Default to dev for other branches
+              ;;
+          esac
+
+      - name: Login to Docker Hub
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build Docker image
+        run: |
+          docker build -t ${REGISTRY}:${IMAGE_NAME}-${{ env.SHORT_SHA }}-${{ env.ENVIRONMENT }} .
+
+      - name: Push Docker image
+        run: |
+          docker push ${REGISTRY}:${IMAGE_NAME}-${{ env.SHORT_SHA }}-${{ env.ENVIRONMENT }}
+          
+  deploy-prod:
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Set Environment Variables Based on Branch
+        id: set-env
+        run: |
+          if [[ "${GITHUB_REF_NAME}" == "main" ]]; then
+            echo "ENVIRONMENT=main" >> $GITHUB_ENV
+            echo "DEPLOY_HOST=${{ secrets.DEPLOY_HOST_PROD }}" >> $GITHUB_ENV
+            echo "DEPLOY_USERNAME=${{ secrets.DEPLOY_USERNAME_PROD }}" >> $GITHUB_ENV
+            echo "SHORT_SHA=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
+          elif [[ "${GITHUB_REF_NAME}" == "stg" ]]; then
+            echo "ENVIRONMENT=stg" >> $GITHUB_ENV
+            echo "DEPLOY_HOST=${{ secrets.DEPLOY_HOST_DEV }}" >> $GITHUB_ENV
+            echo "DEPLOY_USERNAME=${{ secrets.DEPLOY_USERNAME_DEV }}" >> $GITHUB_ENV
+            echo "SHORT_SHA=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
+          else
+            echo "ENVIRONMENT=dev" >> $GITHUB_ENV
+            echo "DEPLOY_HOST=${{ secrets.DEPLOY_HOST_DEV }}" >> $GITHUB_ENV
+            echo "DEPLOY_USERNAME=${{ secrets.DEPLOY_USERNAME_DEV }}" >> $GITHUB_ENV
+            echo "SHORT_SHA=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
+          fi
+
+      - name: Deploy to Production Server
+        env:
+          DEPLOY_USER: ${{ secrets.DEPLOY_USERNAME_PROD }}
+          DEPLOY_SERVER: ${{ secrets.DEPLOY_HOST_PROD }}
+          SSHKEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
+        run: |
+          echo "${SSHKEY}" > private_key
+          chmod 600 private_key
+
+          ssh -i private_key -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_SERVER 'bash -s' << 'EOF'
+            set -e
+            if docker ps -q --filter "name=cai-fe"; then
+              docker stop cai-fe
+              docker rm cai-fe
+            fi
+              docker run -d --name cai-fe -p 3002:3000 --label logging="promtail" --label logging_jobname="cai-fe" --network app --restart always "dsdevopsengineer/private:cai-fe-${{ env.SHORT_SHA }}-${{ env.ENVIRONMENT }}"
+          EOF
+
+          rm private_key
+
+  deploy-stg:
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    if: github.ref == 'refs/heads/stg'
+
+    steps:
+      - name: Set Environment Variables Based on Branch
+        id: set-env
+        run: |
+          if [[ "${GITHUB_REF_NAME}" == "main" ]]; then
+            echo "ENVIRONMENT=main" >> $GITHUB_ENV
+            echo "DEPLOY_HOST=${{ secrets.DEPLOY_HOST_PROD }}" >> $GITHUB_ENV
+            echo "DEPLOY_USERNAME=${{ secrets.DEPLOY_USERNAME_PROD }}" >> $GITHUB_ENV
+            echo "SHORT_SHA=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
+          elif [[ "${GITHUB_REF_NAME}" == "stg" ]]; then
+            echo "ENVIRONMENT=stg" >> $GITHUB_ENV
+            echo "DEPLOY_HOST=${{ secrets.DEPLOY_HOST_STG }}" >> $GITHUB_ENV
+            echo "DEPLOY_USERNAME=${{ secrets.DEPLOY_USERNAME_STG }}" >> $GITHUB_ENV
+            echo "SHORT_SHA=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
+          else
+            echo "ENVIRONMENT=dev" >> $GITHUB_ENV
+            echo "DEPLOY_HOST=${{ secrets.DEPLOY_HOST_DEV }}" >> $GITHUB_ENV
+            echo "DEPLOY_USERNAME=${{ secrets.DEPLOY_USERNAME_DEV }}" >> $GITHUB_ENV
+            echo "SHORT_SHA=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
+          fi
+
+      - name: Deploy to Development Server
+        env:
+          DEPLOY_USER: ${{ secrets.DEPLOY_USERNAME_DEV }}
+          DEPLOY_SERVER: ${{ secrets.DEPLOY_HOST_DEV }}
+          SSHKEY: ${{ secrets.SSH_PRIVATE_KEY_DEV }}
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
+        run: |
+          echo "${SSHKEY}" > private_key
+          chmod 600 private_key
+
+          ssh -i private_key -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_SERVER 'bash -s' << 'EOF'
+            set -e
+            if docker ps -q --filter "name=cai-fe-stg"; then
+              docker stop cai-fe-stg
+              docker rm cai-fe-stg
+            fi
+            docker run -d --name cai-fe-stg -p 8011:3001 --label logging="promtail" --label logging_jobname="cai-fe" --network app --restart always "dsdevopsengineer/private:cai-fe-${{ env.SHORT_SHA }}-${{ env.ENVIRONMENT }}"
+          EOF
+
+          rm private_key
+        
+  deploy-dev:
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    if: github.ref == 'refs/heads/dev'
+
+    steps:
+      - name: Set Environment Variables Based on Branch
+        id: set-env
+        run: |
+          if [[ "${GITHUB_REF_NAME}" == "main" ]]; then
+            echo "ENVIRONMENT=main" >> $GITHUB_ENV
+            echo "DEPLOY_HOST=${{ secrets.DEPLOY_HOST_PROD }}" >> $GITHUB_ENV
+            echo "DEPLOY_USERNAME=${{ secrets.DEPLOY_USERNAME_PROD }}" >> $GITHUB_ENV
+            echo "SHORT_SHA=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
+          elif [[ "${GITHUB_REF_NAME}" == "stg" ]]; then
+            echo "ENVIRONMENT=stg" >> $GITHUB_ENV
+            echo "DEPLOY_HOST=${{ secrets.DEPLOY_HOST_STG }}" >> $GITHUB_ENV
+            echo "DEPLOY_USERNAME=${{ secrets.DEPLOY_USERNAME_STG }}" >> $GITHUB_ENV
+            echo "SHORT_SHA=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
+          else
+            echo "ENVIRONMENT=dev" >> $GITHUB_ENV
+            echo "DEPLOY_HOST=${{ secrets.DEPLOY_HOST_DEV }}" >> $GITHUB_ENV
+            echo "DEPLOY_USERNAME=${{ secrets.DEPLOY_USERNAME_DEV }}" >> $GITHUB_ENV
+            echo "SHORT_SHA=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
+          fi
+
+      - name: Deploy to Development Server
+        env:
+          DEPLOY_USER: ${{ secrets.DEPLOY_USERNAME_DEV }}
+          DEPLOY_SERVER: ${{ secrets.DEPLOY_HOST_DEV }}
+          SSHKEY: ${{ secrets.SSH_PRIVATE_KEY_DEV }}
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
+        run: |
+          echo "${SSHKEY}" > private_key
+          chmod 600 private_key
+
+          ssh -i private_key -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_SERVER 'bash -s' << 'EOF'
+            set -e
+            if docker ps -q --filter "name=cai-fe-dev"; then
+              docker stop cai-fe-dev
+              docker rm cai-fe-dev
+            fi
+            docker run -d --name cai-fe-dev -p 3002:3000 --label logging="promtail" --label logging_jobname="cai-fe" --network app --restart always "dsdevopsengineer/private:cai-fe-${{ env.SHORT_SHA }}-${{ env.ENVIRONMENT }}"
+          EOF
+
+          rm private_key
