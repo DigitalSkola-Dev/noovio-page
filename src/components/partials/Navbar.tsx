@@ -226,55 +226,55 @@ const Navbar = () => {
           </Button>
         </div>
       );
-    }
-
-    return (
-      <div className="container items-center justify-between relative hidden sm:flex">
-        <Logo />
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center">
-          {menuItems.map((item) => (
-            <Link
-              key={item.label}
-              href={item.href}
-              className="hover:!bg-muted px-6 py-2.5 rounded-lg font-medium text-muted-foreground hover:text-foreground"
-            >
-              {item.label}
-            </Link>
-          ))}
-          {/* <NavigationMenu viewport={false}>
-            <NavigationMenuList>
-              {menuItems.map((item) => (
-                <NavigationMenuItem key={item.label}>
-                  {item.isLink ? (
-                    <NavigationMenuLink
-                      asChild
-                      className={navigationMenuTriggerStyle()}
-                    >
-                      <Link href={item.href!}>{item.label}</Link>
-                    </NavigationMenuLink>
-                  ) : (
-                    <>
-                      <NavigationMenuTrigger>
-                        {item.label}
-                      </NavigationMenuTrigger>
-                      <NavigationMenuContent>
-                        {item.content}
-                      </NavigationMenuContent>
-                    </>
-                  )}
-                </NavigationMenuItem>
-              ))}
-            </NavigationMenuList>
-          </NavigationMenu> */}
+    } else {
+      return (
+        <div className="container items-center justify-between relative hidden lg:flex">
+          <Logo />
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center">
+            {menuItems.map((item) => (
+              <Link
+                key={item.label}
+                href={item.href}
+                className="hover:!bg-muted px-6 py-2.5 rounded-lg font-medium text-muted-foreground hover:text-foreground"
+              >
+                {item.label}
+              </Link>
+            ))}
+            {/* <NavigationMenu viewport={false}>
+              <NavigationMenuList>
+                {menuItems.map((item) => (
+                  <NavigationMenuItem key={item.label}>
+                    {item.isLink ? (
+                      <NavigationMenuLink
+                        asChild
+                        className={navigationMenuTriggerStyle()}
+                      >
+                        <Link href={item.href!}>{item.label}</Link>
+                      </NavigationMenuLink>
+                    ) : (
+                      <>
+                        <NavigationMenuTrigger>
+                          {item.label}
+                        </NavigationMenuTrigger>
+                        <NavigationMenuContent>
+                          {item.content}
+                        </NavigationMenuContent>
+                      </>
+                    )}
+                  </NavigationMenuItem>
+                ))}
+              </NavigationMenuList>
+            </NavigationMenu> */}
+          </div>
+          <Button
+            className="h-10 px-8 bg-gradient-to-r from-primary rounded-xl to-primary-accent hover:opacity-90"
+            onClick={handleRedirect}
+          >
+            Get Started
+          </Button>
         </div>
-        <Button
-          className="h-10 px-8 bg-gradient-to-r from-primary rounded-xl to-primary-accent hover:opacity-90"
-          onClick={handleRedirect}
-        >
-          Get Started
-        </Button>
-      </div>
-    );
+      );
+    }
   };
 
   return (

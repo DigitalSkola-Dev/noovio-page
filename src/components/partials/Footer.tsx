@@ -2,6 +2,7 @@
 
 import { Instagram } from "lucide-react";
 import Link from "next/link";
+import { memo } from "react";
 import {
   LinkedInIcon,
   Logo,
@@ -92,6 +93,10 @@ const footerLinks = [
 ];
 
 const Footer = () => {
+  const handleRedirect = () => {
+    window.open(process.env.NEXT_PUBLIC_APP_URL as string, "_blank");
+  };
+
   return (
     <footer className="bg-background pt-12">
       <div className="container">
@@ -130,7 +135,10 @@ const Footer = () => {
               <h4 className="sm:text-lg text-base font-semibold text-primary">
                 Mulai Demo Gratis Sekarang
               </h4>
-              <Button className="h-12 px-10 rounded-2xl bg-[#2C80FF] sm:text-lg text-base shadow shadow-[#2C80FF]/20">
+              <Button
+                onClick={handleRedirect}
+                className="h-12 px-10 rounded-2xl bg-[#2C80FF] sm:text-lg text-base shadow shadow-[#2C80FF]/20"
+              >
                 Demo Gratis Noovio
               </Button>
             </div>
@@ -173,4 +181,4 @@ const Footer = () => {
   );
 };
 
-export default Footer;
+export default memo(Footer);

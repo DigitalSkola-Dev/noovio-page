@@ -15,6 +15,7 @@ export default function VideoPlayer({ url }: Props) {
     <div className="relative w-full max-w-3xl aspect-video rounded-2xl overflow-hidden shadow-lg mx-auto">
       {/* Player */}
       <ReactPlayer
+        src={url}
         playing={play}
         controls
         width="100%"

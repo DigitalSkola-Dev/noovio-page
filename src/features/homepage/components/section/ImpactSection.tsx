@@ -70,7 +70,7 @@ const ImpactSection = () => {
   return (
     <section
       id="impact"
-      className="sm:py-16 py-10 relative overflow-hidden bg-gradient-to-br from-[#E2FFFE] to-background sm:rounded-t-[50px] rounded-t-[30px]"
+      className="sm:py-16 py-10 relative overflow-hidden bg-gradient-to-br from-[#E2FFFE] to-background sm:rounded-t-[35px] rounded-t-[30px]"
     >
       <div className="w-full mx-auto xl:max-w-6xl lg:max-w-5xl md:max-w-2xl px-5">
         <div className="overflow-hidden">
