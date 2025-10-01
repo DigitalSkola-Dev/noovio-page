@@ -16,7 +16,7 @@ on:
 
 env:
   REGISTRY: "dsdevopsengineer/private"
-  IMAGE_NAME: "cai-fe"
+  IMAGE_NAME: "novio"
 
 jobs:
   build-and-push:
@@ -104,11 +104,11 @@ jobs:
 
           ssh -i private_key -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_SERVER 'bash -s' << 'EOF'
             set -e
-            if docker ps -q --filter "name=cai-fe"; then
-              docker stop cai-fe
-              docker rm cai-fe
+            if docker ps -q --filter "name=novio-fe"; then
+              docker stop novio-fe
+              docker rm novio-fe
             fi
-              docker run -d --name cai-fe -p 3002:3000 --label logging="promtail" --label logging_jobname="cai-fe" --network app --restart always "dsdevopsengineer/private:cai-fe-${{ env.SHORT_SHA }}-${{ env.ENVIRONMENT }}"
+              docker run -d --name novio-fe -p 3003:3000 --label logging="promtail" --label logging_jobname="novio-fe" --network app --restart always "dsdevopsengineer/private:novio-${{ env.SHORT_SHA }}-${{ env.ENVIRONMENT }}"
           EOF
 
           rm private_key
@@ -151,11 +151,11 @@ jobs:
 
           ssh -i private_key -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_SERVER 'bash -s' << 'EOF'
             set -e
-            if docker ps -q --filter "name=cai-fe-stg"; then
-              docker stop cai-fe-stg
-              docker rm cai-fe-stg
+            if docker ps -q --filter "name=novio-fe-stg"; then
+              docker stop novio-fe-stg
+              docker rm novio-fe-stg
             fi
-            docker run -d --name cai-fe-stg -p 8011:3001 --label logging="promtail" --label logging_jobname="cai-fe" --network app --restart always "dsdevopsengineer/private:cai-fe-${{ env.SHORT_SHA }}-${{ env.ENVIRONMENT }}"
+            docker run -d --name novio-fe-stg -p 8013:3001 --label logging="promtail" --label logging_jobname="novio-fe-dev" --network app --restart always "dsdevopsengineer/private:novio-${{ env.SHORT_SHA }}-${{ env.ENVIRONMENT }}"
           EOF
 
           rm private_key
@@ -198,11 +198,11 @@ jobs:
 
           ssh -i private_key -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_SERVER 'bash -s' << 'EOF'
             set -e
-            if docker ps -q --filter "name=cai-fe-dev"; then
-              docker stop cai-fe-dev
-              docker rm cai-fe-dev
+            if docker ps -q --filter "name=novio-fe-dev"; then
+              docker stop novio-fe-dev
+              docker rm novio-fe-dev
             fi
-            docker run -d --name cai-fe-dev -p 3002:3000 --label logging="promtail" --label logging_jobname="cai-fe" --network app --restart always "dsdevopsengineer/private:cai-fe-${{ env.SHORT_SHA }}-${{ env.ENVIRONMENT }}"
+            docker run -d --name novio-fe-dev -p 3003:3000 --label logging="promtail" --label logging_jobname="novio-fe-dev" --network app --restart always "dsdevopsengineer/private:novio-${{ env.SHORT_SHA }}-${{ env.ENVIRONMENT }}"
           EOF
 
           rm private_key
