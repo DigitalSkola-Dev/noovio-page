@@ -8,14 +8,19 @@ import { FormInputs } from "../types/homeTypes";
 
 const useHomepage = () => {
   const form = useForm<FormInputs>();
-  const { handleSubmit, reset, setValue } = form;
+  const { handleSubmit, reset } = form;
 
   const mutate = useMutation({
     mutationFn: (payload: FormInputs) =>
       clientPost<{ message: string }>(ADMIN_HELP, payload),
     onSuccess: (data) => {
-      reset();
-      setValue("phone", "62");
+      reset({
+        name: "",
+        phone: "62",
+        email: "",
+        subject: "",
+        message: "",
+      });
       toast.success(data.message ?? "Berhasil kirim pesan");
     },
     onError: (error: any) => {
