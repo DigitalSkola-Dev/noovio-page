@@ -10,9 +10,9 @@ export function SupportFeatureSection() {
   ));
 
   return (
-    <div className="w-full h-full sm:py-16 py-10 relative z-10 bg-background">
+    <section className="w-full h-full sm:py-16 py-10 relative z-10 bg-background">
       <Carousel items={cards} title="Supporting Features" isTitleCentered />
-    </div>
+    </section>
   );
 }
 

@@ -7,8 +7,8 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { useMediaQuery } from "@/hooks";
+import { handleRedirectScroll } from "@/utils/redirect";
 import { Menu } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
 import { Logo } from "../svg";
 import { Button } from "../ui/button";
@@ -181,25 +181,45 @@ import { Button } from "../ui/button";
 
 const menuItems = [
   {
-    label: "Features",
-    href: "#features",
-  },
-  {
     label: "Solutions",
     href: "#solutions",
-  },
-  {
-    label: "Pricing",
-    href: "#pricing",
   },
   {
     label: "About",
     href: "#about",
   },
   {
-    label: "More",
-    href: "#more",
+    label: "Testimonials",
+    href: "#testimonials",
   },
+  {
+    label: "Pricing",
+    href: "#pricing",
+  },
+  {
+    label: "Contact",
+    href: "#contact",
+  },
+  // {
+  //   label: "Features",
+  //   href: "#features",
+  // },
+  // {
+  //   label: "Solutions",
+  //   href: "#solutions",
+  // },
+  // {
+  //   label: "Pricing",
+  //   href: "#pricing",
+  // },
+  // {
+  //   label: "About",
+  //   href: "#about",
+  // },
+  // {
+  //   label: "More",
+  //   href: "#more",
+  // },
 ];
 
 const Navbar = () => {
@@ -232,13 +252,13 @@ const Navbar = () => {
           <Logo />
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center">
             {menuItems.map((item) => (
-              <Link
+              <button
                 key={item.label}
-                href={item.href}
-                className="hover:!bg-muted px-6 py-2.5 rounded-lg font-medium text-muted-foreground hover:text-foreground"
+                className="hover:!bg-muted px-6 py-2.5 rounded-lg font-medium text-muted-foreground hover:text-foreground cursor-pointer"
+                onClick={() => handleRedirectScroll(item.href!)}
               >
                 {item.label}
-              </Link>
+              </button>
             ))}
             {/* <NavigationMenu viewport={false}>
               <NavigationMenuList>
@@ -293,13 +313,17 @@ const Navbar = () => {
           </SheetHeader>
           <div className="p-4 flex flex-col gap-5 h-full overflow-y-auto -mt-10">
             {menuItems.map((item) => (
-              <Link
+              <button
                 key={item.label}
-                href={item.href}
-                className="text-sm text-muted-foreground font-medium hover:text-foreground"
+                // href={item.href}
+                className="!text-sm text-muted-foreground font-medium hover:text-foreground text-start"
+                onClick={() => {
+                  handleRedirectScroll(item.href!);
+                  toggleMenu();
+                }}
               >
                 {item.label}
-              </Link>
+              </button>
             ))}
             <Button
               className="h-10 rounded-lg px-8 bg-gradient-to-r from-primary to-primary-accent text-background hover:opacity-90 !mt-2"

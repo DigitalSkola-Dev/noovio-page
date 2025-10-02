@@ -31,7 +31,7 @@ const child = {
     opacity: 1,
     x: 0,
     transition: {
-      duration: 0.6,
+      duration: 0.5,
     },
   },
 };

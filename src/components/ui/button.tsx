@@ -34,25 +34,64 @@ const buttonVariants = cva(
   }
 );
 
+// function Button({
+//   className,
+//   variant,
+//   size,
+//   asChild = false,
+//   ...props
+// }: React.ComponentProps<"button"> &
+//   VariantProps<typeof buttonVariants> & {
+//     asChild?: boolean;
+//   } & { isLoading?: boolean }) {
+//   const Comp = asChild ? Slot : "button";
+
+//   return (
+//     <Comp
+//       data-slot="button"
+//       className={cn(buttonVariants({ variant, size, className }))}
+//       {...props}
+//     />
+//   );
+// }
+
 function Button({
   className,
   variant,
   size,
   asChild = false,
+  isLoading = false,
+  children,
   ...props
 }: React.ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean;
+    isLoading?: boolean;
   }) {
   const Comp = asChild ? Slot : "button";
 
   return (
     <Comp
       data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }))}
+      className={cn(
+        buttonVariants({ variant, size, className }),
+        isLoading && "cursor-not-allowed opacity-70 animate-pulse"
+      )}
+      disabled={isLoading || props.disabled}
       {...props}
-    />
+    >
+      {isLoading ? (
+        <span className="flex items-center gap-2">
+          <div className="loader" />
+          Loading...
+        </span>
+      ) : (
+        children
+      )}
+    </Comp>
   );
 }
+
+export default Button;
 
 export { Button, buttonVariants };

@@ -9,13 +9,14 @@ import { Controller } from "react-hook-form";
 
 interface Props {
   form: any;
+  isLoading: boolean;
   onSubmit: () => void;
 }
 
-const FormSection = ({ form, onSubmit }: Props) => {
+const FormSection = ({ form, isLoading, onSubmit }: Props) => {
   return (
     <section
-      id="form"
+      id="contact"
       className="sm:pb-16 pb-10 sm:pt-28 pt-20 bg-gradient-to-b from-[#F3F7FF] to-[#BBF7FF] -mt-10 rounded-b-[25px] sm:rounded-b-[35px]"
     >
       <div className="container flex sm:flex-row flex-col xl:gap-20 lg:gap-12 sm:gap-6 gap-10">
@@ -158,7 +159,11 @@ const FormSection = ({ form, onSubmit }: Props) => {
                 />
               )}
             />
-            <Button className="w-full h-12 sm:!text-lg !mt-4 lg:!mt-8 !text-base bg-gradient-to-r from-primary-accent to-primary hover:opacity-90 !font-semibold">
+            <Button
+              type="submit"
+              className="w-full h-12 sm:!text-lg !mt-4 lg:!mt-8 !text-base bg-gradient-to-r from-primary-accent to-primary hover:opacity-90 !font-semibold"
+              isLoading={isLoading}
+            >
               Kirim Pesan
             </Button>
           </form>

@@ -1,8 +1,12 @@
 "use client";
 
+import { PRICING } from "@/constants/apiUrl";
+import { clientGet } from "@/services/fetcher";
+import { Pricing, ResponsePricing } from "@/types/index.type";
+import { useQuery } from "@tanstack/react-query";
 import { Instagram } from "lucide-react";
 import Link from "next/link";
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import {
   LinkedInIcon,
   Logo,
@@ -46,56 +50,79 @@ const socialLinks = [
   },
 ];
 
-const footerLinks = [
-  {
-    title: "FEATURES",
-    links: [
-      { label: "Smart Knowledge Finder", href: "#" },
-      { label: "Smart AI Assistant", href: "#" },
-      { label: "Unified Knowledge Hub", href: "#" },
-      { label: "Chatbot 24/7", href: "#" },
-      { label: "Insights & Analytics", href: "#" },
-      { label: "Supporting Features", href: "#" },
-    ],
-  },
-  {
-    title: "SOLUTIONS",
-    links: [
-      { label: "Enterprise", href: "#" },
-      { label: "Digital Government", href: "#" },
-      { label: "Start Up", href: "#" },
-      { label: "Company", href: "#" },
-      { label: "Partner & Collaboration", href: "#" },
-    ],
-  },
-  {
-    title: "PRICING",
-    links: [
-      { label: "Starter Plan", href: "#" },
-      { label: "Business Plan", href: "#" },
-      { label: "Enterprise Plan", href: "#" },
-    ],
-  },
-  {
-    title: "ABOUT US",
-    links: [
-      { label: "Our Story", href: "#" },
-      { label: "Contact Us", href: "#" },
-    ],
-  },
-  {
-    title: "MORE",
-    links: [
-      { label: "News", href: "#" },
-      { label: "Blog", href: "#" },
-    ],
-  },
-];
-
 const Footer = () => {
   const handleRedirect = () => {
     window.open(process.env.NEXT_PUBLIC_APP_URL as string, "_blank");
   };
+
+  const {
+    data: pricing,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["pricing"],
+    queryFn: () => clientGet<ResponsePricing>(PRICING),
+    select(data) {
+      return data.data || [];
+    },
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+  });
+
+  const footerLinks = useMemo(() => {
+    return [
+      {
+        title: "FEATURES",
+        links: [
+          { label: "Smart Knowledge Finder", href: "coming-soon" },
+          { label: "Smart AI Assistant", href: "coming-soon" },
+          { label: "Unified Knowledge Hub", href: "coming-soon" },
+          { label: "Chatbot 24/7", href: "coming-soon" },
+          { label: "Insights & Analytics", href: "coming-soon" },
+          { label: "Supporting Features", href: "coming-soon" },
+        ],
+      },
+      {
+        title: "SOLUTIONS",
+        links: [
+          { label: "Enterprise", href: "coming-soon" },
+          { label: "Digital Government", href: "coming-soon" },
+          { label: "Start Up", href: "coming-soon" },
+          { label: "Company", href: "coming-soon" },
+          { label: "Partner & Collaboration", href: "coming-soon" },
+        ],
+      },
+      {
+        title: "PRICING",
+        links:
+          isLoading || isError
+            ? [
+                { label: "Starter Plan", href: "coming-soon" },
+                { label: "Business Plan", href: "coming-soon" },
+                { label: "Enterprise Plan", href: "coming-soon" },
+              ]
+            : pricing?.map((plan: Pricing) => ({
+                label: plan.name,
+                href: "coming-soon",
+              })),
+      },
+      {
+        title: "ABOUT US",
+        links: [
+          { label: "Our Story", href: "coming-soon" },
+          { label: "Contact Us", href: "coming-soon" },
+        ],
+      },
+      {
+        title: "MORE",
+        links: [
+          { label: "News", href: "coming-soon" },
+          { label: "Blog", href: "coming-soon" },
+        ],
+      },
+    ];
+  }, [pricing, isLoading, isError]);
 
   return (
     <footer className="bg-background pt-12">
@@ -152,13 +179,14 @@ const Footer = () => {
                   {section.title}
                 </h4>
                 <ul className="space-y-2 sm:text-base text-sm text-[#081646]">
-                  {section.links.map((link, index) => (
-                    <li key={index}>
-                      <Link href={link.href} className="hover:underline">
-                        {link?.label}
-                      </Link>
-                    </li>
-                  ))}
+                  {section.links &&
+                    section.links.map((link, index) => (
+                      <li key={index}>
+                        <Link href={link.href} className="hover:underline">
+                          {link?.label}
+                        </Link>
+                      </li>
+                    ))}
                 </ul>
               </div>
             ))}
@@ -171,9 +199,9 @@ const Footer = () => {
           <p className="text-sm">© 2025 Noovio. All Rights Reserved.</p>
 
           <div className="flex gap-6 text-sm">
-            <Link href="#">Terms of Service</Link>
-            <Link href="#">Privacy Policy</Link>
-            <Link href="#">Refund Policy</Link>
+            <Link href="coming-soon">Terms of Service</Link>
+            <Link href="coming-soon">Privacy Policy</Link>
+            <Link href="coming-soon">Refund Policy</Link>
           </div>
         </div>
       </div>

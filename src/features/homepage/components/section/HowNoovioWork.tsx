@@ -44,6 +44,10 @@ const workSteps = [
   },
 ];
 
+const handleRedirect = () => {
+  return `https://api.whatsapp.com/send?phone=6285640718857&text=Halo,%20saya%20ingin%20menjadwalkan%20demo%20Noovio.%20Mohon%20informasinya.`;
+};
+
 const HowNoovioWork = () => {
   return (
     <section
@@ -84,6 +88,7 @@ const HowNoovioWork = () => {
             variant="outline"
             size="lg"
             className="flex items-center gap-2.5 sm:h-12 h-12 !text-base !px-14 sm:!px-14 lg:mx-0 mx-auto sm:!text-lg !border-primary !text-primary !font-semibold lg:!mt-10 !mt-8 !rounded-xl group hover:!bg-primary hover:!text-background transition duration-300"
+            onClick={() => window.open(handleRedirect(), "_blank")}
           >
             <span>Jadwalkan Demo</span>
             <ArrowRight className="group-hover:translate-x-2 transition duration-300 size-4" />

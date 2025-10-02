@@ -1,5 +1,6 @@
 "use client";
 
+import { Pricing } from "@/types/index.type";
 import Hero from "../components/hero/Hero";
 import { FeatureSection } from "../components/section/FeatureSection";
 import FormSection from "../components/section/FormSection";
@@ -12,9 +13,12 @@ import { SupportFeatureSection } from "../components/section/SupportFeatureSecti
 import TestimoniesSection from "../components/section/TestimoniesSection";
 import useHomepage from "../hooks/useHomepage";
 
-const HomeScreen = () => {
-  const { form, onSubmit } = useHomepage();
+interface Props {
+  pricing: Pricing[];
+}
 
+const HomeScreen = ({ pricing }: Props) => {
+  const { form, isLoading, onSubmit } = useHomepage();
   return (
     <>
       <Hero />
@@ -25,8 +29,8 @@ const HomeScreen = () => {
       <ImpactSection />
       <TestimoniesSection />
       <HowNoovioWork />
-      <PricingSection />
-      <FormSection form={form} onSubmit={onSubmit} />
+      <PricingSection data={pricing} />
+      <FormSection form={form} isLoading={isLoading} onSubmit={onSubmit} />
     </>
   );
 };

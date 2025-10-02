@@ -63,7 +63,7 @@ const Hero = () => {
                 className="xl:!text-5xl lg:!text-[44px] md:!text-3xl !text-2xl leading-snug !font-bold text-background whitespace-break-spaces !my-0"
                 initial={{ y: "100%", opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.6 }}
+                transition={{ duration: 0.5 }}
               >
                 Tingkatkan{" "}
                 <span className="text-primary-accent">Produktivitas Tim</span>
@@ -75,7 +75,7 @@ const Hero = () => {
                 className="lg:!text-xl md:!text-sm !text-lg text-background !leading-normal"
                 initial={{ y: "100%", opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.6, delay: 0.6 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
               >
                 AI-driven platform yang membantu perusahaan bekerja lebih{" "}
                 <br className="md:block hidden" /> cepat, cerdas, dan efisien
@@ -87,7 +87,7 @@ const Hero = () => {
               className="flex justify-center text-center group"
               initial={{ y: "100%", opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.6, delay: 1.2 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
             >
               <HoverBorderGradient
                 as="button"

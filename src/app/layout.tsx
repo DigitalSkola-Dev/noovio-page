@@ -1,4 +1,4 @@
-import { Footer, Navbar } from "@/components/partials";
+import { Footer, Navbar, Providers } from "@/components/partials";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Onest } from "next/font/google";
@@ -65,9 +65,11 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
       </head>
       <body className={cn(onest.className)} suppressHydrationWarning>
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
+        <Providers>
+          <Navbar />
+          <main>{children}</main>
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

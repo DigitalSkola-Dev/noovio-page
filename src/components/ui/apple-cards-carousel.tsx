@@ -40,157 +40,129 @@ export const CarouselContext = createContext<{
 
 export const Carousel = ({
   items,
-  initialScroll = 0,
   title = "Our Features",
   isTitleCentered = false,
 }: CarouselProps) => {
-  const carouselRef = React.useRef<HTMLDivElement>(null);
-  const [canScrollLeft, setCanScrollLeft] = React.useState(false);
-  const [canScrollRight, setCanScrollRight] = React.useState(true);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isDisabledLeft, setIsDisabledLeft] = useState(true);
+  const [isDisabledRight, setIsDisabledRight] = useState(false);
 
   const isMobile = () => {
-    return (window && window.innerWidth < 768) || false;
+    return typeof window !== "undefined" && window.innerWidth < 768;
+  };
+
+  const updateDisabledState = () => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const { scrollLeft, scrollWidth, clientWidth } = container;
+
+    setIsDisabledLeft(scrollLeft <= 0);
+    setIsDisabledRight(scrollLeft + clientWidth >= scrollWidth - 5);
+  };
+
+  const scroll = (direction: "left" | "right") => {
+    if (!containerRef.current) return;
+
+    const card =
+      containerRef.current.querySelector<HTMLDivElement>(".carousel-card");
+    if (!card) return;
+
+    const scrollAmount = card.offsetWidth + (isMobile() ? 16 : 24);
+    const newScrollLeft =
+      direction === "left"
+        ? containerRef.current.scrollLeft - scrollAmount
+        : containerRef.current.scrollLeft + scrollAmount;
+
+    containerRef.current.scrollTo({
+      left: newScrollLeft,
+      behavior: "smooth",
+    });
+
+    // samain sama Pricing: pantau sampai posisi scroll berhenti
+    const checkScroll = () => {
+      updateDisabledState();
+      if (
+        containerRef.current &&
+        containerRef.current.scrollLeft !== newScrollLeft
+      ) {
+        requestAnimationFrame(checkScroll);
+      }
+    };
+    requestAnimationFrame(checkScroll);
   };
 
   useEffect(() => {
-    const handleResize = () => {
-      checkScrollability();
-    };
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  const checkScrollability = () => {
-    if (carouselRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current;
-      setCanScrollLeft(scrollLeft > 0);
-      setCanScrollRight(scrollLeft < scrollWidth - (clientWidth + 40));
-    }
-  };
-
-  const scrollLeft = () => {
-    if (carouselRef.current) {
-      carouselRef.current.scrollBy({ left: -300, behavior: "smooth" });
-    }
-  };
-
-  const scrollRight = () => {
-    if (carouselRef.current) {
-      carouselRef.current.scrollBy({ left: 300, behavior: "smooth" });
-    }
-  };
-
-  const handleCardClose = (index: number) => {
-    if (carouselRef.current) {
-      const cardWidth = isMobile() ? 288 : 384;
-      const gap = isMobile() ? 4 : 8;
-      const scrollPosition = (cardWidth + gap) * (index + 1);
-      carouselRef.current.scrollTo({
-        left: scrollPosition,
-        behavior: "smooth",
-      });
-      setCurrentIndex(index);
-    }
-  };
+    updateDisabledState();
+  }, [items]);
 
   return (
-    <CarouselContext.Provider
-      value={{ onCardClose: handleCardClose, currentIndex }}
-    >
-      <div className="relative w-full">
-        {/* <div className="mr-10 flex justify-end gap-2">
-          <button
-            className="relative z-40 flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 disabled:opacity-50"
-            onClick={scrollLeft}
-            disabled={!canScrollLeft}
+    <div className="relative w-full">
+      <div className="flex items-center justify-between sm:gap-0 gap-3 w-full xl:mb-8 sm:mb-6 mb-4 relative container">
+        {isTitleCentered ? (
+          <h2 className="bg-gradient-to-br from-primary leading-snug to-primary-accent bg-clip-text text-transparent font-bold md:text-4xl sm:text-3xl text-2xl lg:absolute lg:left-1/2 lg:-translate-x-1/2 lg:top-1/2 lg:-translate-y-1/2">
+            {title}
+          </h2>
+        ) : (
+          <h2 className="bg-gradient-to-br from-primary leading-snug to-primary-accent bg-clip-text text-transparent font-bold md:text-4xl sm:text-3xl text-2xl">
+            {title}
+          </h2>
+        )}
+        <div className="rounded-full ml-auto flex items-center p-1 gap-2.5 justify-between border bg-background border-[#EFEFEF]">
+          <Button
+            size="icon"
+            className="rounded-full disabled:bg-background hover:bg-[#D9FFFD] bg-[#D9FFFD] group size-10"
+            onClick={() => scroll("left")}
+            disabled={isDisabledLeft}
+            aria-label="Scroll Left"
           >
-            <IconArrowNarrowLeft className="h-6 w-6 text-gray-500" />
-          </button>
-          <button
-            className="relative z-40 flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 disabled:opacity-50"
-            onClick={scrollRight}
-            disabled={!canScrollRight}
+            <ChevronLeft className="size-6 transition duration-300 group-hover:text-primary text-primary group-disabled:text-[#d4d4d4]" />
+          </Button>
+          <Button
+            size="icon"
+            className="rounded-full disabled:bg-background hover:bg-[#D9FFFD] bg-[#D9FFFD] group size-10"
+            onClick={() => scroll("right")}
+            disabled={isDisabledRight}
+            aria-label="Scroll Right"
           >
-            <IconArrowNarrowRight className="h-6 w-6 text-gray-500" />
-          </button>
-        </div> */}
-        <div className="flex items-center justify-between sm:gap-0 gap-3 w-full xl:mb-8 sm:mb-6 mb-4 relative container">
-          {isTitleCentered ? (
-            <h2 className="bg-gradient-to-br from-primary leading-snug to-primary-accent bg-clip-text text-transparent font-bold md:text-4xl sm:text-3xl text-2xl lg:absolute lg:left-1/2 lg:-translate-x-1/2 lg:top-1/2 lg:-translate-y-1/2">
-              {title}
-            </h2>
-          ) : (
-            <h2 className="bg-gradient-to-br from-primary leading-snug to-primary-accent bg-clip-text text-transparent font-bold md:text-4xl sm:text-3xl text-2xl">
-              {title}
-            </h2>
-          )}
-          <div className="rounded-full ml-auto flex items-center p-1 gap-2.5 justify-between border bg-background border-[#EFEFEF]">
-            <Button
-              size="icon"
-              className="rounded-full disabled:bg-background hover:bg-[#D9FFFD] bg-[#D9FFFD] group size-10"
-              onClick={scrollLeft}
-              disabled={!canScrollLeft}
-              aria-label="Scroll Left"
-            >
-              <ChevronLeft className="size-6 transition duration-300 group-hover:text-primary text-primary group-disabled:text-[#d4d4d4]" />
-            </Button>
-            <Button
-              size="icon"
-              className="rounded-full disabled:bg-background hover:bg-[#D9FFFD] bg-[#D9FFFD] group size-10"
-              onClick={scrollRight}
-              disabled={!canScrollRight}
-              aria-label="Scroll Right"
-            >
-              <ChevronLeft className="size-6 transition duration-300 group-hover:text-primary text-primary group-disabled:text-[#d4d4d4] rotate-180" />
-            </Button>
-          </div>
-        </div>
-        <div
-          className="flex w-full overflow-x-scroll overscroll-x-auto scroll-smooth [scrollbar-width:none]"
-          ref={carouselRef}
-          onScroll={checkScrollability}
-        >
-          <div
-            className={cn(
-              "absolute right-0 z-[1000] h-auto w-[5%] overflow-hidden bg-gradient-to-l"
-            )}
-          ></div>
-
-          <div
-            className={cn(
-              "flex flex-row justify-start gap-4 pl-4",
-              "mx-auto xl:max-w-7xl lg:max-w-5xl md:max-w-2xl sm:max-w-2xl"
-            )}
-          >
-            {items.map((item, index) => (
-              <motion.div
-                initial={{
-                  opacity: 0,
-                  y: 20,
-                }}
-                animate={{
-                  opacity: 1,
-                  y: 0,
-                  transition: {
-                    duration: 0.5,
-                    delay: 0.2 * index,
-                    ease: "easeOut",
-                  },
-                }}
-                viewport={{ once: true }}
-                key={"card" + index}
-                className="rounded-3xl last:pr-[5%] md:last:pr-[33%] pb-10 pt-4"
-              >
-                {item}
-              </motion.div>
-            ))}
-          </div>
+            <ChevronLeft className="size-6 transition duration-300 group-hover:text-primary text-primary group-disabled:text-[#d4d4d4] rotate-180" />
+          </Button>
         </div>
       </div>
-    </CarouselContext.Provider>
+
+      <div
+        className="flex w-full overflow-x-scroll overscroll-x-auto scroll-smooth [scrollbar-width:none] overflow-y-hidden"
+        ref={containerRef}
+        onScroll={updateDisabledState}
+      >
+        <div
+          className={cn(
+            "flex flex-row shrink-0 justify-start gap-4 pl-4",
+            "mx-auto xl:max-w-7xl lg:max-w-5xl md:max-w-2xl sm:max-w-2xl"
+          )}
+        >
+          {items.map((item, index) => (
+            <motion.div
+              key={"card" + index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{
+                opacity: 1,
+                y: 0,
+                transition: {
+                  duration: 0.5,
+                  delay: 0.1 * index,
+                  ease: "easeOut",
+                },
+              }}
+              viewport={{ once: true }}
+              className="carousel-card shrink-0 rounded-3xl last:pr-5 md:last:pr-6 pb-10 pt-4"
+            >
+              {item}
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 };
 

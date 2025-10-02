@@ -64,7 +64,7 @@ const counter = [
 
 const TestimoniesSection = () => {
   return (
-    <section id="testimonies" className="sm:py-10 py-8 container">
+    <section id="testimonials" className="sm:py-10 py-8 container">
       <div className="bg-gradient-to-br from-[#F2F2F2] to-background border border-foreground/10 rounded-3xl sm:py-12 py-8 md:px-0 sm:px-10 px-6">
         <div className="overflow-hidden">
           <m.h2
