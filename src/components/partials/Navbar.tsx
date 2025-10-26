@@ -9,6 +9,7 @@ import {
 import { useMediaQuery } from "@/hooks";
 import { handleRedirectScroll } from "@/utils/redirect";
 import { Menu } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { Logo } from "../svg";
 import { Button } from "../ui/button";
@@ -185,12 +186,12 @@ const menuItems = [
     href: "#solutions",
   },
   {
-    label: "About",
-    href: "#about",
+    label: "Features",
+    href: "#features",
   },
   {
-    label: "Testimonials",
-    href: "#testimonials",
+    label: "About",
+    href: "#about",
   },
   {
     label: "Pricing",
@@ -225,6 +226,9 @@ const menuItems = [
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
+  const { push } = useRouter();
+  const pathname = usePathname();
+
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
@@ -255,7 +259,20 @@ const Navbar = () => {
               <button
                 key={item.label}
                 className="hover:!bg-muted px-6 py-2.5 rounded-lg font-medium text-muted-foreground hover:text-foreground cursor-pointer"
-                onClick={() => handleRedirectScroll(item.href!)}
+                onClick={() => {
+                  const href = item.href!;
+                  if (href.startsWith("/")) {
+                    push(href);
+                    return;
+                  }
+
+                  if (pathname !== "/") {
+                    push("/");
+                    setTimeout(() => handleRedirectScroll(href), 300);
+                  } else {
+                    handleRedirectScroll(href);
+                  }
+                }}
               >
                 {item.label}
               </button>
@@ -315,11 +332,19 @@ const Navbar = () => {
             {menuItems.map((item) => (
               <button
                 key={item.label}
-                // href={item.href}
                 className="!text-sm text-muted-foreground font-medium hover:text-foreground text-start"
                 onClick={() => {
-                  handleRedirectScroll(item.href!);
+                  const href = item.href!;
                   toggleMenu();
+
+                  if (href.startsWith("/")) {
+                    push(href);
+                  } else if (pathname !== "/") {
+                    push("/");
+                    setTimeout(() => handleRedirectScroll(href), 300);
+                  } else {
+                    handleRedirectScroll(href);
+                  }
                 }}
               >
                 {item.label}

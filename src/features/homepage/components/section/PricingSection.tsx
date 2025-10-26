@@ -10,7 +10,6 @@ import parse, { domToReact } from "html-react-parser";
 import { ArrowRight, Check, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion as m } from "motion/react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import BgPricing from "../../assets/bg-pricing.webp";
 
@@ -25,8 +24,6 @@ const handleRedirect = (name?: string) => {
 };
 
 const PricingSection = ({ data }: Props) => {
-  const { push } = useRouter();
-
   const containerRef = useRef<HTMLDivElement>(null);
   const [isDisabledLeft, setIsDisabledLeft] = useState(true);
   const [isDisabledRight, setIsDisabledRight] = useState(false);
@@ -184,17 +181,19 @@ const PricingSection = ({ data }: Props) => {
                     <Button
                       className="w-full h-12 rounded-xl sm:!text-lg !text-base shadow-lg shadow-primary/30"
                       onClick={() => {
-                        if (index === 0) {
-                          window.open(
-                            process.env.NEXT_PUBLIC_APP_URL as string,
-                            "_blank"
-                          );
-                        } else {
-                          window.open(handleRedirect(item.name), "_blank");
-                        }
+                        window.open(handleRedirect(item.name), "_blank");
+                        // if (index === 0) {
+                        //   window.open(
+                        //     process.env.NEXT_PUBLIC_APP_URL as string,
+                        //     "_blank"
+                        //   );
+                        // } else {
+                        //   window.open(handleRedirect(item.name), "_blank");
+                        // }
                       }}
                     >
-                      {index === 0 ? "Coba Gratis Sekarang" : "Mulai"}
+                      {/* {index === 0 ? "Coba Gratis Sekarang" : "Mulai"} */}
+                      Mulai
                     </Button>
 
                     <div className="prose-ul:!space-y-2.5 mt-6">

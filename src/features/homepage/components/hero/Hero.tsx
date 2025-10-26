@@ -4,6 +4,7 @@ import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
 import { useMediaQuery } from "@/hooks";
 import { motion as m } from "framer-motion";
 import Image from "next/image";
+import App from "../../assets/app.png";
 import CarouselsMobile from "../../assets/bg-hero.webp";
 import Carousels from "../../assets/carousels.webp";
 
@@ -13,7 +14,7 @@ const Hero = () => {
   return (
     <header
       id="hero"
-      className="relative w-full overflow-hidden md:h-fit sm:h-[100vh] h-[55vh]"
+      className="relative w-full overflow-hidden md:h-fit sm:h-[100vh] h-[85vh]"
     >
       <Image
         src={isMobile ? CarouselsMobile : Carousels}
@@ -100,7 +101,7 @@ const Hero = () => {
                   );
                 }}
               >
-                Coba Demo Gratis Sekarang!
+                Coba Demo Sekarang!
               </HoverBorderGradient>
             </m.div>
           </div>
@@ -111,7 +112,7 @@ const Hero = () => {
           <div className="text-start">
             <div className="overflow-hidden">
               <m.h1
-                className="!text-3xl sm:!text-4xl leading-snug !font-bold text-background !my-0"
+                className="!text-3xl sm:!text-4xl text-center leading-snug !font-bold text-background !my-0"
                 initial={{ y: "100%", opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 viewport={{ once: true }}
@@ -123,9 +124,9 @@ const Hero = () => {
                 <br className="md:block hidden" /> dengan Noovio AI
               </m.h1>
             </div>
-            <div className="overflow-hidden !mt-6 !mb-10">
+            <div className="overflow-hidden !mt-6 !mb-8">
               <m.p
-                className="!text-base sm:!text-lg text-background !leading-normal max-w-[90%]"
+                className="!text-base sm:!text-lg text-background text-center !leading-normal max-w-[90%]"
                 initial={{ y: "100%", opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 viewport={{ once: true }}
@@ -137,7 +138,7 @@ const Hero = () => {
               </m.p>
             </div>
             <m.div
-              className="flex justify-start group"
+              className="flex justify-center group"
               initial={{ y: "100%", opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               viewport={{ once: true }}
@@ -146,7 +147,7 @@ const Hero = () => {
               <HoverBorderGradient
                 as="button"
                 containerClassName="!border-none !bg-transparent group-hover:-translate-y-2"
-                className="bg-gradient-to-r from-primary-accent to-[#CBFFFD] text-[#0E33A6] h-10 sm:!text-lg sm:h-12 flex items-center px-8 rounded-lg font-semibold cursor-pointer"
+                className="bg-gradient-to-r from-primary-accent to-[#CBFFFD] text-[#0E33A6] h-11 sm:!text-lg sm:h-12 flex items-center px-8 rounded-lg font-semibold cursor-pointer"
                 onClick={() => {
                   window.open(
                     process.env.NEXT_PUBLIC_APP_URL as string,
@@ -154,9 +155,25 @@ const Hero = () => {
                   );
                 }}
               >
-                Coba Demo Gratis Sekarang!
+                Coba Demo Sekarang!
               </HoverBorderGradient>
             </m.div>
+            <div className="flex items-center justify-between mt-6">
+              <div className="w-1/2 h-auto">
+                <Image
+                  src={App}
+                  alt="Noovio AI"
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              <div className="w-1/2 h-auto">
+                <Image
+                  src={App}
+                  alt="Noovio AI"
+                  className="w-full h-full object-contain scale-x-[-1]"
+                />
+              </div>
+            </div>
           </div>
         </div>
       )}

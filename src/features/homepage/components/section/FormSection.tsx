@@ -51,7 +51,7 @@ const FormSection = ({ form, isLoading, onSubmit }: Props) => {
             whileInView={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.4 }}
             viewport={{ once: true }}
-            className="space-y-2 lg:mt-6 sm:mt-5 mt-4 flex flex-col items-center sm:items-start w-full"
+            className="space-y-2 lg:mt-6 sm:mt-5 mt-4 sm:flex hidden flex-col items-center sm:items-start w-full"
           >
             <div className="flex items-center gap-2.5">
               <Mail className="lg:size-5 size-4 text-[#001D80]" />
@@ -72,7 +72,7 @@ const FormSection = ({ form, isLoading, onSubmit }: Props) => {
           whileInView={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="bg-background rounded-2xl sm:rounded-3xl lg:py-8 py-6 sm:px-8 px-5 lg:px-10 sm:w-[54%] xl:w-[60%] lg:w-[55%] w-full"
+          className="bg-background rounded-3xl lg:py-8 py-6 sm:px-8 px-8 lg:px-10 sm:w-[54%] xl:w-[60%] lg:w-[55%] w-full"
         >
           <h4 className="sm:text-2xl text-xl font-bold">
             Punya pertanyaan terkait AI Noovio?
