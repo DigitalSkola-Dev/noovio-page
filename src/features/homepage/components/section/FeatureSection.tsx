@@ -17,7 +17,7 @@ export function FeatureSection() {
 
   return (
     <section
-      id="solutions"
+      id="features"
       className="w-full h-full sm:py-16 py-10 relative z-10 bg-gradient-to-b from-[#F1F8FF] to-[#E2FFFE] sm:rounded-t-[35px] rounded-t-[25px] -mt-9"
     >
       <Carousel items={cards} title="Solusi Lengkap dalam Satu Platform" />

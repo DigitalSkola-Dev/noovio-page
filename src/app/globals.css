@@ -139,7 +139,7 @@
 } */
 
 .react-tel-input .form-control {
-  @apply !border !border-[#D8EEEE] !text-foreground !bg-[#F2FFFF] dark:bg-primary-accent !min-w-full !h-12 !rounded-md shadow-[2px_2px_12px_0px_#E4ECFF]/60 dark:shadow-[2px_2px_12px_0px_#000000]/40 dark:border-[#D8EEEE] dark:text-foreground !text-base !pl-16;
+  @apply !border !border-[#D8EEEE] !text-foreground !bg-[#F2FFFF] dark:bg-primary-accent !w-full !h-12 !rounded-md shadow-[2px_2px_12px_0px_#E4ECFF]/60 dark:shadow-[2px_2px_12px_0px_#000000]/40 dark:border-[#D8EEEE] dark:text-foreground !text-base !pl-16;
 }
 
 .react-tel-input .form-control:focus {

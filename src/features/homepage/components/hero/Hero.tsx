@@ -4,7 +4,7 @@ import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
 import { useMediaQuery } from "@/hooks";
 import { motion as m } from "framer-motion";
 import Image from "next/image";
-import App from "../../assets/app.png";
+import BgHeroMobile from "../../assets/bg-hero-mobile.png";
 import CarouselsMobile from "../../assets/bg-hero.webp";
 import Carousels from "../../assets/carousels.webp";
 
@@ -14,7 +14,7 @@ const Hero = () => {
   return (
     <header
       id="hero"
-      className="relative w-full overflow-hidden md:h-fit sm:h-[100vh] h-[85vh]"
+      className="relative w-full overflow-hidden md:h-fit sm:h-[100vh] h-[76vh]"
     >
       <Image
         src={isMobile ? CarouselsMobile : Carousels}
@@ -108,74 +108,87 @@ const Hero = () => {
         </div>
       )}
       {isMobile && (
-        <div className="absolute top-1/2 transform px-5 sm:px-8 -translate-y-1/2 z-[3] w-full">
-          <div className="text-start">
-            <div className="overflow-hidden">
-              <m.h1
-                className="!text-3xl sm:!text-4xl text-center leading-snug !font-bold text-background !my-0"
+        <>
+          <div className="absolute top-[32%] transform px-5 sm:px-8 -translate-y-1/2 z-[3] w-full">
+            <div className="text-start">
+              <div className="overflow-hidden">
+                <m.h1
+                  className="!text-3xl sm:!text-4xl text-center leading-snug !font-bold text-background !my-0"
+                  initial={{ y: "100%", opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6 }}
+                >
+                  Tingkatkan{" "}
+                  <span className="text-primary-accent">Produktivitas Tim</span>
+                  <br className="sm:block hidden" />
+                  <br className="md:block hidden" /> dengan Noovio AI
+                </m.h1>
+              </div>
+              <div className="overflow-hidden !mt-5 !mb-7">
+                <m.p
+                  className="!text-base sm:!text-lg text-background text-center !leading-normal mx-auto max-w-[92%]"
+                  initial={{ y: "100%", opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                >
+                  AI-driven platform yang membantu perusahaan bekerja lebih
+                  cepat, cerdas, dan efisien lewat pencarian dokumen, knowledge
+                  base, dan otomatisasi kerja.
+                </m.p>
+              </div>
+              <m.div
+                className="flex justify-center group"
                 initial={{ y: "100%", opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
               >
-                Tingkatkan{" "}
-                <span className="text-primary-accent">Produktivitas Tim</span>
-                <br className="sm:block hidden" />
-                <br className="md:block hidden" /> dengan Noovio AI
-              </m.h1>
-            </div>
-            <div className="overflow-hidden !mt-6 !mb-8">
-              <m.p
-                className="!text-base sm:!text-lg text-background text-center !leading-normal max-w-[90%]"
-                initial={{ y: "100%", opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-              >
-                AI-driven platform yang membantu perusahaan bekerja lebih cepat,
-                cerdas, dan efisien lewat pencarian dokumen, knowledge base, dan
-                otomatisasi kerja.
-              </m.p>
-            </div>
-            <m.div
-              className="flex justify-center group"
-              initial={{ y: "100%", opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-            >
-              <HoverBorderGradient
-                as="button"
-                containerClassName="!border-none !bg-transparent group-hover:-translate-y-2"
-                className="bg-gradient-to-r from-primary-accent to-[#CBFFFD] text-[#0E33A6] h-11 sm:!text-lg sm:h-12 flex items-center px-8 rounded-lg font-semibold cursor-pointer"
-                onClick={() => {
-                  window.open(
-                    process.env.NEXT_PUBLIC_APP_URL as string,
-                    "_blank"
-                  );
-                }}
-              >
-                Coba Demo Sekarang!
-              </HoverBorderGradient>
-            </m.div>
-            <div className="flex items-center justify-between mt-6">
-              <div className="w-1/2 h-auto">
-                <Image
-                  src={App}
-                  alt="Noovio AI"
-                  className="w-full h-full object-contain"
-                />
-              </div>
-              <div className="w-1/2 h-auto">
-                <Image
-                  src={App}
-                  alt="Noovio AI"
-                  className="w-full h-full object-contain scale-x-[-1]"
-                />
-              </div>
+                <HoverBorderGradient
+                  as="button"
+                  containerClassName="!border-none !bg-transparent group-hover:-translate-y-2"
+                  className="bg-gradient-to-r from-primary-accent to-[#CBFFFD] text-[#0E33A6] h-11 sm:!text-lg sm:h-12 flex items-center px-8 rounded-lg font-semibold cursor-pointer"
+                  onClick={() => {
+                    window.open(
+                      process.env.NEXT_PUBLIC_APP_URL as string,
+                      "_blank"
+                    );
+                  }}
+                >
+                  Coba Demo Sekarang!
+                </HoverBorderGradient>
+              </m.div>
             </div>
           </div>
-        </div>
+          <div className="flex items-center justify-between mt-6 w-[90%] absolute -bottom-5 left-[53%] -translate-x-1/2">
+            {/* Glow / Sinar effect behind image */}
+            <div className="absolute inset-0 z-10 pointer-events-none">
+              <div
+                className="absolute left-1/2 bottom-0 -translate-x-1/2 w-[80%] h-24 blur-2xl rounded-[32px]"
+                style={{
+                  background:
+                    "radial-gradient(20.7% 50% at 50% 100%, hsl(0, 0%, 100%) 0%, rgba(255, 255, 255, 0) 100%)",
+                  filter: "blur(2px)",
+                  position: "absolute",
+                  width: "100%",
+                  height: "100%",
+                }}
+              />
+              <div className="absolute left-1/2 bottom-2 -translate-x-1/2 w-[85%] h-6 rounded-full bg-[#FFFFFF]/50 blur-lg" />
+            </div>
+
+            <div className="w-full h-auto">
+              <Image
+                src={BgHeroMobile}
+                alt="Noovio AI"
+                className="w-full h-full object-cover"
+                quality={100}
+                fetchPriority="high"
+              />
+            </div>
+          </div>
+        </>
       )}
     </header>
   );

@@ -49,7 +49,7 @@ const ProductivityChallengesSection = () => {
         height={400}
         priority
         quality={100}
-        className="absolute -top-1 lg:left-0 md:-left-[20%] w-auto h-full z-[-1] md:object-contain object-cover"
+        className="absolute -top-1 lg:left-0 md:-left-[20%] w-auto h-full z-[-1] md:object-contain opacity-50 object-cover"
         fetchPriority="high"
       />
 
@@ -60,7 +60,7 @@ const ProductivityChallengesSection = () => {
         height={400}
         priority
         quality={100}
-        className="absolute -top-1 lg:right-0 md:-right-[20%] w-auto h-full object-contain md:block hidden z-[-1]"
+        className="absolute -top-1 lg:right-0 md:-right-[20%] w-auto h-full object-contain opacity-50 md:block hidden z-[-1]"
         fetchPriority="high"
       />
 

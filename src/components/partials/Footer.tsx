@@ -74,17 +74,6 @@ const Footer = () => {
   const footerLinks = useMemo(() => {
     return [
       {
-        title: "SOLUTIONS",
-        href: "#solutions",
-        links: [
-          { label: "Smart Knowledge Finder", href: "#solutions" },
-          { label: "Smart AI Assistant", href: "#solutions" },
-          { label: "Unified Knowledge Hub", href: "#solutions" },
-          { label: "Chatbot 24/7 & Onboarding Otomatis", href: "#solutions" },
-          { label: "Monitoring Insights & Analytics", href: "#solutions" },
-        ],
-      },
-      {
         title: "FEATURES",
         href: "#features",
         links: [
@@ -93,6 +82,17 @@ const Footer = () => {
           { label: "My Tasks & Requests", href: "#features" },
           { label: "Security & Role-Based Access", href: "#features" },
           { label: "Admin Dashboard", href: "#features" },
+        ],
+      },
+      {
+        title: "SOLUTIONS",
+        href: "#about",
+        links: [
+          { label: "Smart Knowledge Finder", href: "#solutions" },
+          { label: "Smart AI Assistant", href: "#solutions" },
+          { label: "Unified Knowledge Hub", href: "#solutions" },
+          { label: "Chatbot 24/7 & Onboarding Otomatis", href: "#solutions" },
+          { label: "Monitoring Insights & Analytics", href: "#solutions" },
         ],
       },
       {
@@ -111,8 +111,8 @@ const Footer = () => {
               })),
       },
       {
-        title: "ABOUT",
-        href: "#about",
+        title: "CONTACT",
+        href: "#contact",
         links: [
           { label: "Our Story", href: "#testimonials" },
           { label: "Contact Us", href: "#contact" },
@@ -162,7 +162,7 @@ const Footer = () => {
               </p>
             </div>
 
-            <div className="space-y-2 md:space-y-4 w-full">
+            <div className="space-y-2 md:space-y-4 w-full md:hidden block">
               <h4 className="sm:text-lg text-base md:text-start text-center font-semibold text-primary">
                 Mulai Sekarang
               </h4>
@@ -176,16 +176,16 @@ const Footer = () => {
           </div>
 
           {/* Footer Links */}
-          <div className="md:grid flex justify-around md:grid-cols-2 lg:grid-cols-4 lg:col-span-4 md:gap-6">
+          <div className="md:grid flex justify-around md:grid-cols-2 lg:grid-cols-4 lg:col-span-4">
             {footerLinks.map((section) => (
               <div key={section.title}>
                 <h4
-                  className="font-bold mb-4 text-[#C3C3C3] md:text-base text-[14px] md:text-start text-center cursor-pointer"
+                  className="font-bold text-[#C3C3C3] md:text-base text-[14px] md:text-start text-center cursor-pointer"
                   onClick={() => handleRedirectScroll(section.href)}
                 >
                   {section.title}
                 </h4>
-                <ul className="space-y-2 md:block hidden sm:text-base text-sm text-[#081646]">
+                {/* <ul className="space-y-2 md:block hidden sm:text-base text-sm text-[#081646]">
                   {section.links &&
                     section.links.map((link, index) => (
                       <li
@@ -196,9 +196,20 @@ const Footer = () => {
                         {link?.label}
                       </li>
                     ))}
-                </ul>
+                </ul> */}
               </div>
             ))}
+            <div className="space-y-2 md:space-y-4 w-full md:block hidden lg:col-span-2">
+              <h4 className="sm:text-lg text-base md:text-start text-center font-semibold text-primary">
+                Mulai Sekarang
+              </h4>
+              <Button
+                onClick={handleRedirect}
+                className="h-12 px-10 rounded-2xl bg-[#2C80FF] md:mx-0 mx-auto w-full max-w-xs sm:text-lg text-base shadow shadow-[#2C80FF]/20"
+              >
+                Get Started
+              </Button>
+            </div>
           </div>
         </div>
       </div>

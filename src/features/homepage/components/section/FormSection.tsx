@@ -4,8 +4,10 @@ import { Textarea } from "@/components/textarea";
 import { Button } from "@/components/ui/button";
 import { motion as m } from "framer-motion";
 import { Mail, Phone } from "lucide-react";
+import Image from "next/image";
 import { memo } from "react";
 import { Controller } from "react-hook-form";
+import bgAsset from "../../assets/bg-asset.png";
 
 interface Props {
   form: any;
@@ -17,11 +19,11 @@ const FormSection = ({ form, isLoading, onSubmit }: Props) => {
   return (
     <section
       id="contact"
-      className="sm:pb-16 pb-10 sm:pt-28 pt-20 bg-gradient-to-b from-[#F3F7FF] to-[#BBF7FF] -mt-10 rounded-b-[25px] sm:rounded-b-[35px]"
+      className="sm:pt-28 pt-20 bg-gradient-to-b from-[#F3F7FF] to-[#BBF7FF] -mt-10 rounded-b-[25px] sm:rounded-b-[35px] overflow-hidden"
     >
-      <div className="container flex sm:flex-row flex-col xl:gap-20 lg:gap-12 sm:gap-6 gap-10">
-        <div className="flex flex-col justify-start xl:w-[40%] lg:w-[45%] sm:w-[46%] w-full">
-          <div className="overflow-hidden  mb-6">
+      <div className="container flex sm:flex-row flex-col xl:gap-14 lg:gap-12 sm:gap-6 gap-10">
+        <div className="flex flex-col justify-start xl:w-[45%] lg:w-[45%] sm:w-[46%] w-full relative">
+          <div className="overflow-hidden mb-6">
             <m.h2
               initial={{ y: "100%", opacity: 0 }}
               whileInView={{ y: 0, opacity: 1 }}
@@ -66,13 +68,23 @@ const FormSection = ({ form, isLoading, onSubmit }: Props) => {
               </span>
             </div>
           </m.div>
+          <div className="w-full lg:block hidden absolute bottom-0 left-1/2 -translate-x-1/2 z-10">
+            <Image
+              src={bgAsset}
+              alt="bg-asset"
+              width={500}
+              height={500}
+              className="w-full h-full object-contain"
+              quality={100}
+            />
+          </div>
         </div>
         <m.div
           initial={{ scale: 0.8, opacity: 0 }}
           whileInView={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="bg-background rounded-3xl lg:py-8 py-6 sm:px-8 px-8 lg:px-10 sm:w-[54%] xl:w-[60%] lg:w-[55%] w-full"
+          className="bg-background rounded-3xl lg:py-8 py-6 sm:px-8 px-8 lg:px-10 sm:w-[54%] xl:w-[55%] lg:w-[55%] w-full mb-10"
         >
           <h4 className="sm:text-2xl text-xl font-bold">
             Punya pertanyaan terkait AI Noovio?

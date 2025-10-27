@@ -182,17 +182,17 @@ import { Button } from "../ui/button";
 
 const menuItems = [
   {
-    label: "Solutions",
-    href: "#solutions",
-  },
-  {
     label: "Features",
     href: "#features",
   },
   {
-    label: "About",
+    label: "Solutions",
     href: "#about",
   },
+  // {
+  //   label: "About",
+  //   href: "#about",
+  // },
   {
     label: "Pricing",
     href: "#pricing",
