@@ -3,7 +3,6 @@
 import { PRICING } from "@/constants/apiUrl";
 import { clientGet } from "@/services/fetcher";
 import { Pricing, ResponsePricing } from "@/types/index.type";
-import { handleRedirectScroll } from "@/utils/redirect";
 import { useQuery } from "@tanstack/react-query";
 import { Instagram } from "lucide-react";
 import Link from "next/link";
@@ -177,7 +176,7 @@ const Footer = () => {
 
           {/* Footer Links */}
           <div className="md:grid flex justify-around md:grid-cols-2 lg:grid-cols-4 lg:col-span-4">
-            {footerLinks.map((section) => (
+            {/* {footerLinks.map((section) => (
               <div key={section.title}>
                 <h4
                   className="font-bold text-[#C3C3C3] md:text-base text-[14px] md:text-start text-center cursor-pointer"
@@ -185,7 +184,7 @@ const Footer = () => {
                 >
                   {section.title}
                 </h4>
-                {/* <ul className="space-y-2 md:block hidden sm:text-base text-sm text-[#081646]">
+                <ul className="space-y-2 md:block hidden sm:text-base text-sm text-[#081646]">
                   {section.links &&
                     section.links.map((link, index) => (
                       <li
@@ -196,9 +195,9 @@ const Footer = () => {
                         {link?.label}
                       </li>
                     ))}
-                </ul> */}
+                </ul>
               </div>
-            ))}
+            ))} */}
             <div className="space-y-2 md:space-y-4 w-full md:block hidden lg:col-span-2">
               <h4 className="sm:text-lg text-base md:text-start text-center font-semibold text-primary">
                 Mulai Sekarang
