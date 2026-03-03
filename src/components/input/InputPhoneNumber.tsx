@@ -1,9 +1,11 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import dynamic from "next/dynamic";
 import { memo, useState } from "react";
-import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+
+const PhoneInput = dynamic(() => import("react-phone-input-2"), { ssr: false });
 
 interface Props {
   label?: string;

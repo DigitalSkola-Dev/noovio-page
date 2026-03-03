@@ -1,28 +1,15 @@
-# --- Dependencies build stage ---
-FROM node:20-alpine AS deps
-
-# Install required system packages for canvas
-RUN apk add --no-cache \
-  build-base \
-  cairo-dev \
-  pango-dev \
-  jpeg-dev \
-  giflib-dev \
-  librsvg-dev \
-  python3
+# --- Dependencies & build stage ---
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Copy package manifests
+# Copy package manifests and install dependencies
 COPY package.json yarn.lock ./
-
-# Install dependencies
 RUN yarn install --frozen-lockfile
 
-# Copy the rest of the application
+# Copy source and build
 COPY . .
-
-# Build the app
+ENV NODE_ENV=production
 RUN yarn build
 
 # --- Production image ---
@@ -30,13 +17,22 @@ FROM node:20-alpine AS runner
 
 WORKDIR /app
 
-# Only copy necessary files from the build stage
-COPY --from=deps /app ./
+ENV NODE_ENV=production
 
-# Expose app port
+# Create non-root user for security
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs
+
+# Copy only the standalone output and static assets
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+
+USER nextjs
+
 EXPOSE 3000
 
-# Set environment variable if needed
-# ENV NODE_ENV=production
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
 
-CMD ["yarn", "start"]
+CMD ["node", "server.js"]
